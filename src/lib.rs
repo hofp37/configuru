@@ -1,4 +1,5 @@
 use std::{fmt::{Display, Debug}, env, ffi::OsString, borrow::Borrow, fs::read_to_string};
+use regex::Regex;
 use serde_json::{Value, Map};
 
 pub struct Loader {
@@ -107,6 +108,11 @@ impl From<Value> for Loader {
     }
 }
 
+fn remove_comments(jsonc_content: &str) -> String {
+  let regex = Regex::new(r"//[^\n]*").unwrap();
+  regex.replace_all(jsonc_content, "").to_string()
+}
+
 pub fn configuru<T>(default_path: &str) -> T where T: From<Loader> {
     let path = match env::var_os("CFG_JSON_PATH") {
         Some(v) => v.into_string().unwrap(),
@@ -114,7 +120,18 @@ pub fn configuru<T>(default_path: &str) -> T where T: From<Loader> {
     };
     let root_dir = env::current_dir().expect("Failed to get current directory");
     let json_file_path = root_dir.join(path);
-    let contents = read_to_string(&json_file_path).expect(format!("File {} does not exists", json_file_path.to_str().unwrap()).as_str());
+    let contents = if let Some(extension) = json_file_path.extension() {
+      let file_contents = read_to_string(&json_file_path)
+          .expect(format!("File {} does not exist", json_file_path.to_str().unwrap()).as_str());
+
+      match extension.to_str() {
+          Some("json") => file_contents,
+          Some("jsonc") => remove_comments(&file_contents),
+          _ => panic!("Unsupported file extension"),
+      }
+      } else {
+      panic!("File extension not found");
+    };
     let x: serde_json::Value = serde_json::from_str(contents.as_str()).unwrap();
     return T::from(Loader::from(x))
 }
