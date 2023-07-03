@@ -30,10 +30,25 @@ mod tests {
     }
 
     #[test]
-    fn test() {
+    fn test_json_file() {
         let config: Config = configuru(".env.json");
         println!("{:?}", config);
         assert_eq!("<redacted>", config.password.to_string());
         assert_eq!("testtest", config.password.val());
+    }
+
+    #[test]
+    fn test_jsonc_file() {
+        let config: Config = configuru(".env.jsonc");
+        println!("{:?}", config);
+        assert_eq!("<redacted>", config.password.to_string());
+        assert_eq!("testtest", config.password.val());
+    }
+
+    #[test]
+    #[should_panic(expected = "Unsupported file extension")]
+    fn test_extension_panic() {
+        let config: Config = configuru("env.txt");
+        println!("{:?}", config);
     }
 }
