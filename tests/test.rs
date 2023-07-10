@@ -51,4 +51,22 @@ mod tests {
         let config: Config = configuru("env.txt");
         println!("{:?}", config);
     }
+
+    #[test]
+    #[should_panic(expected = "Variable not found in provided configuration file.")]
+    fn test_variable_not_found() {
+      #[derive(Debug)]
+      struct WrongConfig {
+        url: String,
+      }
+      impl From<Loader> for WrongConfig {
+        fn from(loader: Loader) -> Self {
+          WrongConfig {
+                url: loader.str("URL"),
+            }
+        }
+      }
+        let config: WrongConfig = configuru(".env.jsonc");
+        println!("{:?}", config);
+    }
 }

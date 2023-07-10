@@ -5,7 +5,7 @@
 ## TO-DOs
 
 - [x] JSONC support
-- [ ] Improved custom error handling
-- [ ] Write more tests
+- [x] Improved custom error handling
+- [x] Write more tests
 - [ ] Add README
 - [ ] Publish crate

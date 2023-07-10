@@ -58,37 +58,67 @@ impl Loader {
     pub fn i64(&self, name: &str) -> i64 {
         match env::var_os(name) {
             Some(v) => v.into_string().unwrap().parse::<i64>().unwrap(),
-            None => self.json[name].as_i64().unwrap(),
+            None => {
+              match self.json.get(name) {
+                Some(_v) => self.json[name].as_i64().unwrap(),
+                None => panic!("Variable not found in provided configuration file."),
+              }
+            },
         }
     }
     pub fn u64(&self, name: &str) -> u64 {
         match env::var_os(name) {
             Some(v) => v.into_string().unwrap().parse::<u64>().unwrap(),
-            None => self.json[name].as_u64().unwrap(),
+            None => {
+              match self.json.get(name) {
+                Some(_v) => self.json[name].as_u64().unwrap(),
+                None => panic!("Variable not found in provided configuration file."),
+              }
+            },
         }
     }
     pub fn f64(&self, name: &str) -> f64 {
         match env::var_os(name) {
             Some(v) => v.into_string().unwrap().parse::<f64>().unwrap(),
-            None => self.json[name].as_f64().unwrap(),
+            None => {
+              match self.json.get(name) {
+                Some(_v) => self.json[name].as_f64().unwrap(),
+                None => panic!("Variable not found in provided configuration file."),
+              }
+            },
         }
     }
     pub fn str(&self, name: &str) -> String {
         match env::var_os(name) {
             Some(v) => v.into_string().unwrap(),
-            None => self.json[name].as_str().unwrap().to_owned(),
+            None => {
+              match self.json.get(name) {
+                Some(_v) => self.json[name].as_str().unwrap().to_owned(),
+                None => panic!("Variable not found in provided configuration file."),
+              }
+            },
         }
     }
     pub fn bool(&self, name: &str) -> bool {
         match env::var_os(name) {
             Some(v) => v.into_string().unwrap().parse::<bool>().unwrap(),
-            None => self.json[name].as_bool().unwrap(),
+            None => {
+              match self.json.get(name) {
+                Some(_v) => self.json[name].as_bool().unwrap(),
+                None => panic!("Variable not found in provided configuration file."),
+              }
+            },
         }
     }
     pub fn json(&self, name: &str) -> Value {
         let s = match env::var_os(name) {
             Some(v) => v.into_string().unwrap(),
-            None => self.json[name].as_str().unwrap().to_owned(),
+            None => {
+              match self.json.get(name) {
+                Some(_v) => self.json[name].as_str().unwrap().to_owned(),
+                None => panic!("Variable not found in provided configuration file."),
+              }
+            },
         };
         serde_json::from_str(s.as_str()).unwrap()
     }
