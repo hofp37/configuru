@@ -1,6 +1,6 @@
-use std::{fmt::{Display, Debug}, env, ffi::OsString, borrow::Borrow, fs::read_to_string};
+use std::{fmt::{Display, Debug}, env, fs::read_to_string};
 use regex::Regex;
-use serde_json::{Value, Map};
+use serde_json::Value;
 
 pub struct Loader {
     json: Value
