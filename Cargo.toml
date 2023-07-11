@@ -2,6 +2,12 @@
 name = "configuru"
 version = "0.1.0"
 edition = "2021"
+license-file = "LICENSE"
+description = "Library for configuration management in Rust apps."
+homepage = "https://www.ackee.agency"
+documentation = "https://github.com/hofp37/configuru"
+repository = "https://github.com/hofp37/configuru"
+readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
